@@ -15,3 +15,7 @@ class Video(models.Model):
     video_author_link = models.CharField(max_length=200, default="null")
     video_view = models.CharField(max_length=200, default="null")
     video_pub_date = models.CharField(max_length=200, default="null")
+    video_formats = models.CharField(max_length=200, default="null")
+
+    def __str__(self):
+        return self.video_title
