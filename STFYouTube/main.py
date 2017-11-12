@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import commands
+import json
 import logging as log
 import os
 import re
@@ -26,7 +27,8 @@ HEADER = {
     "Connection": "keep-alive"}
 
 M4A_CODE = 140
-VIDEO_STORE_PATH = "/var/www/html/media//SFTYouTube/video/"
+VIDEO_STORE_PATH = "/var/www/html/media/SFTYouTube/video/"
+APACHE_VIDEO_PATH = "/media/SFTYouTube/video/"
 URL_BASE = "https://www.youtube.com"
 VIDEO_LINK_REGEX = re.compile(r'(^/watch\?v=[\w_-]{11})$')
 
@@ -76,12 +78,16 @@ def get_video_formats(video_link):
     formats = ["%s||%s" % (line.split('mp4')[0].strip(),
                            line.split('mp4')[1].split("DASH video")[0].strip())
                for line in formats_string.split('\n') if "DASH video" in line]
+    formats = json.dumps(formats)
     print formats
-    Video.objects.get(video_link=video_link).video_formats = str(formats)
+    model = Video.objects.get(video_link=video_link)
+    model.video_formats = formats
+    model.save()
 
 
 def get_video_best_quality(video_link):
     formats = Video.objects.get(video_link=video_link).video_formats
+    formats = json.loads(formats)
     print formats
     best_pixel = max([x.split("x")[1] for x in formats])
     return get_code_from_pixel(video_link, best_pixel)
@@ -89,6 +95,7 @@ def get_video_best_quality(video_link):
 
 def get_pixel_from_code(video_link, code):
     formats = Video.objects.get(video_link=video_link).video_formats
+    formats = json.loads(formats)
     for fm in formats:
         if code in fm:
             pixel = fm.split("x")[1] + "p"
@@ -97,6 +104,7 @@ def get_pixel_from_code(video_link, code):
 
 def get_code_from_pixel(video_link, pixel):
     formats = Video.objects.get(video_link=video_link).video_formats
+    formats = json.loads(formats)
     for fm in formats:
         if pixel in fm:
             code = fm.split('||')[0]
@@ -109,18 +117,23 @@ def download_video(video_link, code=137):
         commands.getstatusoutput(mkdir_video_path_cmd)
     os.chdir(VIDEO_STORE_PATH)
     download_cmd = "youtube-dl -f %s+%s %s" % (code, M4A_CODE, video_link)
+    print download_cmd
     status, content = commands.getstatusoutput(download_cmd)
+    log.info("status:%s, content:%s" % (status, content))
     if status != 0:
         log.error("download video from %s failed" % video_link)
 
 
 def rename_video(video_link, code):
     video_title = Video.objects.get(video_link=video_link).video_title
-    pixel = get_code_from_pixel(video_link, code)
-    video_name = video_title + pixel + ".mp4"
+    pixel = get_pixel_from_code(video_link, code)
+    video_name = video_title + "-" + pixel + ".mp4"
     video_id = video_link[-11:]
-    rename_video_cmd = "mv *%s* %s" % (video_id, video_name)
+    log.info("video_name: %s, video_id:%s" % (video_name, video_id))
+    rename_video_cmd = "qt-faststart *%s*.mp4 '%s'" % (video_id, video_name)
     status, content = commands.getstatusoutput(rename_video_cmd)
+    log.info("rename_video_cmd:%s, status:%s, content:%s" %
+             (rename_video_cmd, status, content))
     if status != 0:
         log.error("rename video to %s failed" % video_name)
     return video_name

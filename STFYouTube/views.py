@@ -24,7 +24,7 @@ def home_page_view(request):
     return HttpResponse(template.render(context, request))
 
 
-def watch_video_paget_view(request):
+def watch_video_page_view(request):
     video_id = request.GET['id']
     video_link = Video.objects.get(video_id=video_id).video_link
     print video_link
@@ -36,13 +36,10 @@ def watch_video_paget_view(request):
     download_video(video_link, code=best_code)
     # rename the video
     video_name = rename_video(video_link, best_code)
-    video_path = VIDEO_STORE_PATH
+    video_path = APACHE_VIDEO_PATH
     template = loader.get_template("watch_video.html")
     context = {
         'video_path': video_path,
         'video_name': video_name,
     }
     return HttpResponse(template.render(context, request))
-
-
-
