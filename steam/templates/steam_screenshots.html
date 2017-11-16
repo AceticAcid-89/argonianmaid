@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AceticAcid</title>
+</head>
+<body style="font-family:consolas;text-align:center">
+{% for image in image_files %}
+<br>
+<p>@_@|@_@|@_@ {{ image }} @_@|@_@|@_@</p>
+<br>
+<img src="http://45.76.173.146{{ image_path }}{{ image|urlencode }}"/>
+{% endfor %}
+</body>
+</html>

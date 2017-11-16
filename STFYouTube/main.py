@@ -36,8 +36,8 @@ VIDEO_LINK_REGEX = re.compile(r'(^/watch\?v=[\w_-]{11})$')
 def get_soup_from_page(page_link):
     web_request = urllib2.Request(page_link, headers=HEADER)
     web_content = urllib2.urlopen(web_request).read()
-    with open("youtube.html", 'w') as f:
-        f.write(web_content)
+    # with open("youtube.html", 'w') as f:
+    #     f.write(web_content)
     page_soup = BeautifulSoup(web_content.decode("utf-8"), "html.parser")
     return page_soup
 

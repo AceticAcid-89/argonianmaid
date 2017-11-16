@@ -31,6 +31,8 @@ ALLOWED_HOSTS = [u'45.76.173.146', ]
 # Application definition
 
 INSTALLED_APPS = [
+    'steam.apps.SteamConfig',
+    'blog.apps.BlogConfig',
     'STFYouTube.apps.StfyoutubeConfig',
     'django.contrib.admin',
     'django.contrib.auth',

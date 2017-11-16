@@ -3,13 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>ACETICACID</title>
-    <style type="text/css">
-    a {
-        font-family:consolas;
-      }
-    </style>
 </head>
-<body>
+<body style="font-family:consolas">
 {% for model in video_model %}
 <a target="_blank" href="/youtube/watch/?id={{ model.video_id }}">{{ model.video_title }}</a><br>
 {% endfor %}

@@ -20,4 +20,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^youtube/', include('STFYouTube.urls')),
+    url(r'^blog/', include('blog.urls')),
+    url(r'^steam/', include('steam.urls')),
 ]
