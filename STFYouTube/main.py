@@ -14,15 +14,18 @@ from STFYouTube.models import Video
 
 log.basicConfig(
     level=log.DEBUG,
-    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+    format='%(asctime)s %(filename)s[line:%(lineno)d] '
+           '%(levelname)s %(message)s',
     datefmt='%a, %d %b %Y %H:%M:%S',
     filename='STFYouTube.log',
     filemode='w')
 
 HEADER = {
     "Accept-Language": "en-US,en;q=0.5",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) "
+                  "Gecko/20100101 Firefox/40.0",
+    "Accept": "text/html,application/xhtml+xml,"
+              "application/xml;q=0.9,*/*;q=0.8",
     "Referer": "https://www.youtube.com",
     "Connection": "keep-alive"}
 
@@ -55,7 +58,8 @@ def get_video_model_from_page(page_soup):
             video_author = label.next_sibling.a.string.strip()
             video_author_link = label.next_sibling.a["href"]
             video_view = label.next_sibling.next_sibling.ul.li.string
-            video_pub_date = label.next_sibling.next_sibling.ul.li.next_sibling.string
+            video_pub_date = \
+                label.next_sibling.next_sibling.ul.li.next_sibling.string
 
             if not Video.objects.filter(video_id=video_id):
                 Video(

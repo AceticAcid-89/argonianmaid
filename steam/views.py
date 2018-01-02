@@ -9,29 +9,32 @@ from bs4 import BeautifulSoup
 from django.http import HttpResponse
 from django.template import loader
 
-REQ_ARTWORK_URL = "http://steamcommunity.com/apps/allcontenthome/?l=schinese" \
-                  "&browsefilter=trend&browsefilter=trend&appHubSubSection=4" \
-                  "&appHubSubSection=4&forceanon=1&userreviewsoffset=0&p=%s" \
-                  "&workshopitemspage=%s&readytouseitemspage=%s&mtxitemspage=%s" \
-                  "&itemspage=%s&screenshotspage=%s&videospage=%s&artpage=%s" \
-                  "&allguidepage=%s&webguidepage=%s&integratedguidepage=%s" \
-                  "&discussionspage=%s&numperpage=10&appid=0"
+REQ_ARTWORK_URL = \
+    "http://steamcommunity.com/apps/allcontenthome/?l=schinese" \
+    "&browsefilter=trend&browsefilter=trend&appHubSubSection=4" \
+    "&appHubSubSection=4&forceanon=1&userreviewsoffset=0&p=%s" \
+    "&workshopitemspage=%s&readytouseitemspage=%s&mtxitemspage=%s" \
+    "&itemspage=%s&screenshotspage=%s&videospage=%s&artpage=%s" \
+    "&allguidepage=%s&webguidepage=%s&integratedguidepage=%s" \
+    "&discussionspage=%s&numperpage=10&appid=0"
 
 
-SCREENSHOTS_URL = "http://steamcommunity.com/apps/allcontenthome/?l=schinese" \
-                  "&browsefilter=trend&browsefilter=trend&appHubSubSection=2" \
-                  "&appHubSubSection=2&forceanon=1&userreviewsoffset=0&p=%s" \
-                  "&workshopitemspage=%s&readytouseitemspage=%s&mtxitemspage=%s" \
-                  "&itemspage=%s&screenshotspage=%s&videospage=%s&artpage=%s" \
-                  "&allguidepage=%s&webguidepage=%s&integratedguidepage=%s" \
-                  "&discussionspage=%s&numperpage=10&appid=0"
-
+SCREENSHOTS_URL = \
+    "http://steamcommunity.com/apps/allcontenthome/?l=schinese" \
+    "&browsefilter=trend&browsefilter=trend&appHubSubSection=2" \
+    "&appHubSubSection=2&forceanon=1&userreviewsoffset=0&p=%s" \
+    "&workshopitemspage=%s&readytouseitemspage=%s&mtxitemspage=%s" \
+    "&itemspage=%s&screenshotspage=%s&videospage=%s&artpage=%s" \
+    "&allguidepage=%s&webguidepage=%s&integratedguidepage=%s" \
+    "&discussionspage=%s&numperpage=10&appid=0"
 
 
 HEADER = {
     "Accept-Language": "en-US,en;q=0.5",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) "
+                  "Gecko/20100101 Firefox/40.0",
+    "Accept": "text/html,application/xhtml+xml,"
+              "application/xml;q=0.9,*/*;q=0.8",
     "Referer": "https://www.youtube.com",
     "Connection": "keep-alive"}
 
@@ -81,7 +84,8 @@ def artwork_view(request):
     for i in range(1, 20):
         page = str(i)
         page_request_link = REQ_ARTWORK_URL % (
-            page, page, page, page, page, page, page, page, page, page, page, page)
+            page, page, page, page, page, page,
+            page, page, page, page, page, page)
         img_link_list = find_all_images(page_request_link)
         write_image_to_disk(page, img_link_list, "ARTWORK")
     image_files = commands.getoutput("ls ARTWORK*").split("\n")
@@ -98,7 +102,8 @@ def screenshots_view(request):
     for i in range(1, 20):
         page = str(i)
         page_request_link = SCREENSHOTS_URL % (
-            page, page, page, page, page, page, page, page, page, page, page, page)
+            page, page, page, page, page, page,
+            page, page, page, page, page, page)
         img_link_list = find_all_images(page_request_link)
         write_image_to_disk(page, img_link_list, "SCREENSHOTS")
     image_files = commands.getoutput("ls SCREENSHOTS*").split("\n")
