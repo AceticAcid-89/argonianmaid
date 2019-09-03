@@ -1,3 +1,4 @@
+requests
 beautifulsoup4
 youtube-dl
 django
